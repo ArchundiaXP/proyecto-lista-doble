@@ -9,10 +9,13 @@ descripcion: el programa es capas de:
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRUE 1
+#define FALSE 0
 
 typedef struct nodo{
     int idViaje[10];
     char hrRegistro[20];
+    int idChofer[10];
     char nombreChofer[20];
     char apellidoP[20];
     char apellidoM[20];
@@ -60,6 +63,8 @@ void registraDatos(pNodo *P){
     printf("Ingrese los datos solicitados...\n");
     printf("ID del viaje: ");
     scanf("%d", &(*P)->idViaje);
+    printf("id del chofer: ");
+    scanf("%d", &(*P)->idChofer);
     printf("Nombre de conductor:");
     scanf("%s", &(*P)->nombreChofer);
     printf("Apellido Paterno: ");
@@ -270,6 +275,47 @@ void insertarFinal (pNodo P){
         T->siguiente=Q;
 }
 
+/*
+*/
+void insertarAntes (pNodo *P){
+
+    pNodo Q, T, X;
+    int NumRef;
+    int BAND = TRUE;
+    
+    system("cls");
+
+    printf("Insertar registro nuevo antes de un de ....\n");
+    printf("Ingrese el ID ya sea del empleado, unidad o viaje: ");
+    scanf("%d", &NumRef);
+
+
+    Q=*P;
+
+    while (Q->idChofer != NumRef && BAND==TRUE){
+		if (Q->siguiente != NULL){
+			T=Q;
+			Q=Q->siguiente;
+		} else {
+			BAND=FALSE;
+		}
+	}
+
+    if(BAND == FALSE){
+        printf("Registro encontrado...\n");
+        printf("Ingrese los datos solicitados...\n");
+
+        Q = (pNodo) malloc (sizeof(tNodo));
+        registraDatos(&Q);
+
+        Q->siguiente = *P;
+        Q->anterior = NULL;
+
+        (*P)-> siguiente = Q;
+        *P = Q;
+
+    }
+}
 
 int main(){
 
