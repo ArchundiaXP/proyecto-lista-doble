@@ -31,6 +31,22 @@ typedef tNodo *pNodo;
 
 /*-----------------Funciones De La Estrcuctura De Datos----------------------*/
 
+
+/*
+Nombre: VeriEstado
+fecha: 01/12/2023
+Objetivo: verificar el estado de  la lista si esta vacia o ya cuenta con elementos en ella 
+(nodos)*/
+
+int VeriEstado(pNodo *P){
+    if(*P == NULL){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
 /*
 nombre: registraDatos
 fecha: 28-11-2023
@@ -64,6 +80,24 @@ void registraDatos(pNodo *P){
     printf("Hora de llegada estimada: ");
     scanf("%s", &(*P)->horaLlegada);
    
+}
+
+/*Nombre: imprimeNodo
+Fecha: 01/12/2023
+objetivo: imprime el nodo completo que se le solicita*/
+void imprimeNodo(pNodo *P){
+    printf("ID del viaje: %d\n", (*P)->idViaje);
+    printf("Nombre de conductor: %s\n", (*P)->nombreChofer);
+    printf("Apellido Paterno: %s\n", (*P)->apellidoP);
+    printf("Apellido Materno: %s\n", (*P)->apellidoM);
+
+    printf("\n");
+
+    printf("Numero de la unidad asignada: %d\n", (*P)->numUnidad); 
+    printf("Sucursal de partida: %s\n", (*P)->lugarSalida);
+    printf("Hora de salida: %s\n", (*P)->horaSalida);
+    printf("Sucursal a arribar : %s\n", (*P)->lugarLlegada);
+    printf("Hora de llegada estimada: %s\n", (*P)->horaLlegada);
 }
 
 /*
@@ -141,10 +175,104 @@ nombre:
 fecha: 01/12/2023
 objetivo: 
 */
-void recorrerIterativo ()
+void recorrerIterativo (pNodo P){
+    pNodo Q;
+    Q = P;
+    
+    system("cls");
+    printf("\nmostrando lista de forma iterativa..\n\n");
+    
+	    do {
+            imprimeNodo(&Q);
+		    Q=Q->siguiente;
+	    } while (Q != NULL);
+
+}
+
+
+/*
+Nombre: recorrerIterativoInverso
+fecha: 01/12/2023
+objetivo: recorrer la lista de manera iterativa pero inversamente*/
+void recorrerIterativoInverso (pNodo P){
+    pNodo Q;
+    Q = P;
+
+    printf("\nmostrando lista de forma iterativa inversa..\n\n"); 
+
+    while (Q->siguiente != NULL){ /*bamos al final*/
+    		Q=Q->siguiente;
+    }
+
+    do{
+        imprimeNodo(&Q);
+        Q=Q->anterior;
+
+    	} while (Q != NULL);
+}
+
+
+/*
+nombre: recursivo
+fecha: 01/12/2023
+objetivo: recorrer lalista y imprimirla de forma recursiva*/
+void recursivo(pNodo P){
+    if(P != NULL){
+        printf("\nImprimiendo de manera recursiva...\n");
+        imprimeNodo(&P);
+        recursivo(P->siguiente);
+    }
+}
+
+
+/*
+nombre: recursivoInve
+fecha: 01/12/2023
+obejtivo: recorrer la lista de forma recursiva pero inversamente*/
+void recursivoInv(pNodo P){
+    pNodo Q;
+	
+	Q=P;
+	while (Q->siguiente != NULL){
+		Q=Q->siguiente;
+	}
+	
+	do {
+		imprimeNodo(&Q);
+
+		Q=Q->anterior;
+	} while (Q != NULL);
+}
+
+
+/*
+nombre: insertarInicio
+fecha: 01/12/2023
+objetivo: insertar un nuevo noregistro al inicio de la lista
+*/
+void insertarFinal (pNodo P){
+    system("cls");
+    printf("Insertar registro al final de la lista\n");
+
+    pNodo Q, T;
+    T=P;
+
+    while(T->siguiente != NULL){
+
+        T=T->siguiente;
+	    }
+
+        Q = (pNodo) malloc (sizeof(tNodo));
+        registraDatos(&Q);
+
+        Q->siguiente=NULL;
+        Q->anterior=T;
+        T->siguiente=Q;
+}
+
 
 int main(){
 
-
+    printf("codigo funcionando correctamente...");
     return 0;
 }
