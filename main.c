@@ -13,9 +13,9 @@ descripcion: el programa es capas de:
 #define FALSE 0
 
 typedef struct nodo{
-    int idViaje[10];
+    int idViaje;
     char hrRegistro[20];
-    int idChofer[10];
+    int idChofer;
     char nombreChofer[20];
     char apellidoP[20];
     char apellidoM[20];
@@ -58,7 +58,7 @@ objetivo: solicita los datos que se guardaran en un nodo de la lista
 void registraDatos(pNodo *P){
 
     printf("Central De Autobuses Del Norte\n");
-    printf("Registro de control de horarios - %s \n");
+    printf("Registro de control de horarios  \n");
 
     printf("Ingrese los datos solicitados...\n");
     printf("ID del viaje: ");
@@ -66,24 +66,24 @@ void registraDatos(pNodo *P){
     printf("id del chofer: ");
     scanf("%d", &(*P)->idChofer);
     printf("Nombre de conductor:");
-    scanf("%s", &(*P)->nombreChofer);
+    scanf("%s", (*P)->nombreChofer);
     printf("Apellido Paterno: ");
-    scanf("%s", &(*P)->apellidoP);
+    scanf("%s", (*P)->apellidoP);
     printf("Apellido Materno: ");
-    scanf("%s", &(*P)->apellidoM);
+    scanf("%s", (*P)->apellidoM);
 
     printf("\n");
 
     printf("Numero de la unidad asignada: ");
     scanf("%d", &(*P)->numUnidad); 
     printf("Sucursal de partida: ");
-    scanf("%s", &(*P)->lugarSalida);
-    printf("Hora de salida: ");
-    scanf("%s", &(*P)->horaSalida);
+    scanf("%s", (*P)->lugarSalida);
+    printf("Hora de salida(00:00): ");
+    scanf("%s", (*P)->horaSalida);
     printf("Sucursal a arribar : ");
-    scanf("%s", &(*P)->lugarLlegada);
-    printf("Hora de llegada estimada: ");
-    scanf("%s", &(*P)->horaLlegada);
+    scanf("%s", (*P)->lugarLlegada);
+    printf("Hora de llegada estimada(00:00): ");
+    scanf("%s", (*P)->horaLlegada);
    
 }
 
@@ -276,6 +276,9 @@ void insertarFinal (pNodo P){
 }
 
 /*
+NOMBRE : insertarAntes
+FECHA : 02/12/2023
+OBJETIVO : insertar un nuevo registro antes de un nodo que se le indique
 */
 void insertarAntes (pNodo *P){
 
@@ -292,7 +295,7 @@ void insertarAntes (pNodo *P){
 
     Q=*P;
 
-    while (Q->idChofer != NumRef && BAND==TRUE){
+    while ((Q->idChofer||Q->numUnidad||Q->idViaje)!= NumRef && BAND==TRUE){
 		if (Q->siguiente != NULL){
 			T=Q;
 			Q=Q->siguiente;
@@ -316,6 +319,9 @@ void insertarAntes (pNodo *P){
 
     }
 }
+
+
+
 
 int main(){
 
