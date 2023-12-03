@@ -32,8 +32,7 @@ typedef struct nodo{
 
 typedef tNodo *pNodo;
 
-/*-----------------Funciones De La Estrcuctura De Datos----------------------*/
-
+/*-*-*-*-*-*-*-*-*-*-*-*-*Funciones De La Estrcuctura De Datos-*-*-*-*-*-*-*-*-*-* */
 
 /*
 Nombre: VeriEstado
@@ -105,6 +104,8 @@ void imprimeNodo(pNodo *P){
     printf("Hora de llegada estimada: %s\n", (*P)->horaLlegada);
 }
 
+/*--------------------------funciones de creacion----------------------------*/
+
 /*
 nombre: crearInicio
 fecha: 17-11-2023
@@ -175,10 +176,13 @@ void crearFinal (pNodo *P){
 
 }
 
+
+/*---------------------------funciones recorrer------------------------------------*/
+
 /*
-nombre:
+nombre:recorrerIterativo
 fecha: 01/12/2023
-objetivo: 
+objetivo: recorrerIterativamente la lista y mostrarla en pantalla
 */
 void recorrerIterativo (pNodo P){
     pNodo Q;
@@ -193,7 +197,6 @@ void recorrerIterativo (pNodo P){
 	    } while (Q != NULL);
 
 }
-
 
 /*
 Nombre: recorrerIterativoInverso
@@ -249,6 +252,7 @@ void recursivoInv(pNodo P){
 	} while (Q != NULL);
 }
 
+/*--------------------------Funciones Insertar-----------------------------*/
 
 /*
 nombre: insertarInicio
@@ -306,21 +310,138 @@ void insertarAntes (pNodo *P){
 
     if(BAND == FALSE){
         printf("Registro encontrado...\n");
-        printf("Ingrese los datos solicitados...\n");
+        X = (pNodo) malloc (sizeof(tNodo));
+        registraDatos(&X);
 
-        Q = (pNodo) malloc (sizeof(tNodo));
-        registraDatos(&Q);
+    if (*P==Q){
+        X->anterior=NULL;
+        X->siguiente=*P;
+        (*P)->anterior=X;
+        *P=X;
+    }else{
+        T->siguiente=X;
+        X->anterior=T;
+        X->siguiente=Q;
+        Q->anterior=X;
+    }
 
-        Q->siguiente = *P;
-        Q->anterior = NULL;
-
-        (*P)-> siguiente = Q;
-        *P = Q;
-
+    }else{
+        printf("Registro no encontrado...\n");
     }
 }
 
+/*-------------------------------Funciones eliminacion-------------------------*/
 
+/*
+Nombre: eliminarPrimero
+fecha: 02/12/2023
+objetivo: eliminar el primer registro de la lista
+*/
+void eliminarPrimero(pNodo *P){
+    pNodo Q;
+    Q=*P;
+
+    system("cls");
+    printf("Eliminando el primer registro de la lista...\n");
+
+    if (Q->siguiente != NULL){
+        *P=Q->siguiente;
+    	(*P)->anterior=NULL;
+
+    	}else{
+    		*P=NULL;
+    	}
+
+    free(Q);
+}
+
+/*
+NOmbre: eliminarUltimo
+fecha: 02/12/2023
+objetivo: eliminar el ultimo registro de la lista
+*/
+void eliminarUltimo(pNodo *P){
+    pNodo Q,T;
+    system("cls");
+
+    printf("Eliminando el ultimo registro de la lista...\n");
+    if ((*P)->siguiente==NULL){
+    		free(P);
+    		*P=NULL;
+    	}else {
+    		Q=*P;
+    		while (Q->siguiente != NULL){
+    			T=Q;
+    			Q=Q->siguiente;
+    		}
+    		T->siguiente=NULL;
+    		free(Q);
+    	}
+
+}
+
+/*
+NOMBRE: eliminarX
+FECHA: 02/12/2023
+OBJETIVO: eliminar un registro de la lista que se le indique
+*/
+void eliminarX(pNodo *P){
+    pNodo Q, T;
+    int NumRef;
+    int BAND = TRUE;
+    Q=*P;
+    printf("\tEliminando un registro de la lista...\n\n");
+
+    printf("Ingrese el  del empleado, unidad o viaje que desea dar de baja: ");
+    scanf("%d", &NumRef);
+
+     while ((Q->idChofer||Q->numUnidad||Q->idViaje)!= NumRef && BAND==TRUE){
+		if (Q->siguiente != NULL){
+			T=Q;
+			Q=Q->siguiente;
+		} else {
+			BAND=FALSE;
+		}
+	}
+
+    if (BAND==FALSE){
+    		printf("El elemento no fue encontrado");
+    	}else if(*P==Q){
+           *P=Q->siguiente;
+    		(*P)->anterior= NULL;
+
+    	} else {
+    		T->siguiente=Q->siguiente;
+    		(Q->siguiente)->anterior=T;
+    	}
+
+    free(Q);
+    printf("Registro eliminado correctamente...\n");
+
+}
+
+
+/*
+NOmbre:buscarRecursivo
+fecha: 02/12/2023
+objetivo: buscar un registro solicitado de la lista de forma recursiva
+*/
+void buscarRecursivo(pNodo P){
+    int NumRef;
+    printf("Ingrese el ID del empleado, unidad o viaje que desea buscar: ");
+    scanf("%d", &NumRef);
+
+    if(P != NULL){
+        if(P->idChofer == NumRef || P->numUnidad == NumRef || P->idViaje == NumRef){
+            printf("Registro encontrado...\n");
+            imprimeNodo(&P);
+        }else{
+            buscarRecursivo(P->siguiente);
+        }
+    }else{
+        printf("Registro no encontrado...\n");
+    }
+}
 
 
 int main(){
