@@ -35,6 +35,31 @@ typedef tNodo *pNodo;
 /*-*-*-*-*-*-*-*-*-*-*-*-*Funciones De La Estrcuctura De Datos-*-*-*-*-*-*-*-*-*-* */
 
 /*
+Nombre:imprimeMenu
+fecha: 01/12/2023
+objetivo: imprimir el menu de opciones del programa
+*/
+void imprimeMenu(){
+    printf("\t--Central De Autobuses Del Norte--\n\n");
+
+    printf("1.- Crear lista\n");
+    printf("2.-Crear Final\n");
+    printf("3.-Recorrer Iterativo\n");
+    printf("4.-Recorrer Iterativo Inverso\n");
+    printf("5.-Recorrer Recursivo\n");
+    printf("6.-Recorrer Recursivo Inverso\n");
+    printf("7.-Insertar nuevo registro\n");
+    printf("8.-Insertar nuevo registro antes de otro registro\n");
+    printf("9.-Eliminar primer registro\n");
+    printf("10.-Eliminar ultimo registro\n");
+    printf("11.-Eliminar registro especifico\n");
+    printf("12.-Buscar registro\n");
+    printf("0.-Salir\n\n");
+
+}
+
+
+/*
 Nombre: VeriEstado
 fecha: 01/12/2023
 Objetivo: verificar el estado de  la lista si esta vacia o ya cuenta con elementos en ella 
@@ -445,6 +470,26 @@ void buscarRecursivo(pNodo P){
 
 
 int main(){
+    pNodo P = NULL;
+    int X;
+    int OPC = 0;
+
+    do{
+        system("cls");
+        imprimeMenu();
+
+        printf("Ingrese una opcion: ");
+        scanf("%d", &OPC);
+
+        if(OPC <= 3){
+            if(VeriEstado(&P)==1){
+                 printf("La lista esta vacia...\n");
+                break;
+            }
+    
+        }
+
+    }while(OPC != 0);
 
     printf("codigo funcionando correctamente...");
     return 0;
