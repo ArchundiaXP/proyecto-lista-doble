@@ -152,14 +152,14 @@ void crearInicio (pNodo *P){
             Q = (pNodo) malloc (sizeof(tNodo));
             registraDatos(&Q);
 
-            Q->siguiente = *P;
-            Q->anterior = NULL;
+            Q->siguiente = NULL;
+            Q->anterior = *P;
 
             (*P)-> siguiente = Q;
             *P = Q;
 
         printf("Desea agregar otro registro? (Y/N): ");
-        scanf("%c", &opc);
+        scanf("%s", &opc);
 
     }while (opc == 'Y' || opc == 'y');
     
@@ -219,7 +219,8 @@ void recorrerIterativo (pNodo P){
 	    do {
             imprimeNodo(&Q);
 		    Q=Q->siguiente;
-	    } while (Q->siguiente != NULL);
+	    } while (Q != NULL);
+    system("pause");
 
 }
 
@@ -242,6 +243,7 @@ void recorrerIterativoInverso (pNodo P){
         Q=Q->anterior;
 
     	} while (Q != NULL);
+        system("pause");
 }
 
 
@@ -255,6 +257,7 @@ void recursivo(pNodo P){
         imprimeNodo(&P);
         recursivo(P->siguiente);
     }
+    system("pause");
 }
 
 
@@ -275,6 +278,7 @@ void recursivoInv(pNodo P){
 
 		Q=Q->anterior;
 	} while (Q != NULL);
+    system("pause");
 }
 
 /*--------------------------Funciones Insertar-----------------------------*/
@@ -378,6 +382,7 @@ void eliminarPrimero(pNodo *P){
     	}
 
     free(Q);
+    system("pause");
 }
 
 /*
@@ -402,7 +407,7 @@ void eliminarUltimo(pNodo *P){
     		T->siguiente=NULL;
     		free(Q);
     	}
-
+    system("pause");
 }
 
 /*
@@ -466,6 +471,7 @@ void buscarRecursivo(pNodo P){
     }else{
         printf("Registro no encontrado...\n");
     }
+    system("pause");
 }
 
 /*///////////////////////////////FUNCIONES DE GESTION DE ARCHIVOS////////////////////////////*/
@@ -504,6 +510,7 @@ void guardarCSV(pNodo P) {
 
     fclose(archivo); // Cierra el archivo después de escribir los datos
     printf("Datos guardados correctamente en %s.\n", nombreArchivo);
+    system("pause");
 }
 
 
@@ -626,6 +633,7 @@ int main(){
         
     }while(OPC != 0);
 
-    printf("codigo funcionando correctamente...");
+    printf("\nNos vemos pronto super usuario...");
+    system("pause");
     return 0;
 }
