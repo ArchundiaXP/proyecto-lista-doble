@@ -54,6 +54,7 @@ void imprimeMenu(){
     printf("10.-Eliminar ultimo registro\n");
     printf("11.-Eliminar registro especifico\n");
     printf("12.-Buscar registro\n");
+    printf("13.-Exportar registro a una tabla\n");
     printf("0.-Salir\n\n");
 
 }
@@ -82,7 +83,7 @@ objetivo: solicita los datos que se guardaran en un nodo de la lista
 void registraDatos(pNodo *P){
 
     printf("Central De Autobuses Del Norte\n");
-    printf("Registro de control de horarios  \n");
+    printf("Registro de control de horarios  \n\n");
 
     printf("Ingrese los datos solicitados...\n");
     printf("ID del viaje: ");
@@ -90,7 +91,7 @@ void registraDatos(pNodo *P){
     printf("id del chofer: ");
     scanf("%d", &(*P)->idChofer);
     printf("Nombre de conductor:");
-    scanf("%s", (*P)->nombreChofer);
+    scanf(" %[^\n]", (*P)->nombreChofer);
     printf("Apellido Paterno: ");
     scanf("%s", (*P)->apellidoP);
     printf("Apellido Materno: ");
@@ -101,11 +102,11 @@ void registraDatos(pNodo *P){
     printf("Numero de la unidad asignada: ");
     scanf("%d", &(*P)->numUnidad); 
     printf("Sucursal de partida: ");
-    scanf("%s", (*P)->lugarSalida);
+    scanf(" %[^\n]", (*P)->lugarSalida); 
     printf("Hora de salida(00:00): ");
     scanf("%s", (*P)->horaSalida);
     printf("Sucursal a arribar : ");
-    scanf("%s", (*P)->lugarLlegada);
+    scanf(" %[^\n]", (*P)->lugarLlegada);
     printf("Hora de llegada estimada(00:00): ");
     scanf("%s", (*P)->horaLlegada);
    
