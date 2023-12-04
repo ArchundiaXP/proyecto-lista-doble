@@ -63,13 +63,13 @@ void imprimeMenu(){
 Nombre: VeriEstado
 fecha: 01/12/2023
 Objetivo: verificar el estado de  la lista si esta vacia o ya cuenta con elementos en ella 
-(nodos)*/
-
-int VeriEstado(pNodo *P){
-    if(*P == NULL){
-        return 1;
-    }else{
-        return 0;
+(nodos)
+*/
+int veriEstado(pNodo P) {
+    if (P == NULL) {
+        return TRUE; // La lista está vacía
+    } else {
+        return FALSE; // La lista contiene elementos
     }
 }
 
@@ -207,7 +207,7 @@ void crearFinal (pNodo *P){
 /*
 nombre:recorrerIterativo
 fecha: 01/12/2023
-objetivo: recorrerIterativamente la lista y mostrarla en pantalla
+objetivo: recorrer Iterativamente la lista y mostrarla en pantalla
 */
 void recorrerIterativo (pNodo P){
     pNodo Q;
@@ -219,7 +219,7 @@ void recorrerIterativo (pNodo P){
 	    do {
             imprimeNodo(&Q);
 		    Q=Q->siguiente;
-	    } while (Q != NULL);
+	    } while (Q->siguiente != NULL);
 
 }
 
@@ -468,6 +468,46 @@ void buscarRecursivo(pNodo P){
     }
 }
 
+/*///////////////////////////////FUNCIONES DE GESTION DE ARCHIVOS////////////////////////////*/
+
+/*
+Nombre: guardarCSV
+fecha: 03/12/2023
+Objetivo: Guardar los datos de la lista en un archivo CSV llamado "registro.csv"
+*/
+void guardarCSV(pNodo P) {
+    FILE *archivo;
+    char *nombreArchivo = "registro.csv";
+
+    archivo = fopen(nombreArchivo, "a+"); // Abre el archivo en modo lectura y escritura, crea el archivo si no existe ("a+")
+
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return;
+    }
+
+    // Verifica si el archivo está vacío
+    fseek(archivo, 0, SEEK_END); // Se coloca al final del archivo
+    if (ftell(archivo) == 0) { // Comprueba la posición actual para determinar si el archivo está vacío
+        // Si el archivo está vacío, escribe los encabezados
+        fprintf(archivo, "ID Viaje, Hora Registro, ID Chofer, Nombre Chofer, Apellido Paterno, Apellido Materno, Num Unidad, Lugar Salida, Lugar Llegada, Hora Salida, Hora Llegada\n");
+    }
+
+    // Regresa al inicio del archivo
+    fseek(archivo, 0, SEEK_SET);
+
+    // Escribe los datos de la lista en el archivo CSV
+    while (P != NULL) {
+        fprintf(archivo, "%d, %s, %d, %s, %s, %s, %d, %s, %s, %s, %s\n", P->idViaje, P->hrRegistro, P->idChofer, P->nombreChofer, P->apellidoP, P->apellidoM, P->numUnidad, P->lugarSalida, P->lugarLlegada, P->horaSalida, P->horaLlegada);
+        P = P->siguiente;
+    }
+
+    fclose(archivo); // Cierra el archivo después de escribir los datos
+    printf("Datos guardados correctamente en %s.\n", nombreArchivo);
+}
+
+
+
 
 int main(){
     pNodo P = NULL;
@@ -481,14 +521,109 @@ int main(){
         printf("Ingrese una opcion: ");
         scanf("%d", &OPC);
 
-        if(OPC <= 3){
-            if(VeriEstado(&P)==1){
-                 printf("La lista esta vacia...\n");
+        switch(OPC){
+            case 1:
+                crearInicio(&P);
                 break;
-            }
-    
+            case 2:
+                crearFinal(&P);
+                break;
+            case 3:
+                if(veriEstado(P)){
+                    printf("La lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    recorrerIterativo(P);
+                }
+                break;
+            case 4:
+                if(veriEstado(P)){
+                    printf("La lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    recorrerIterativoInverso(P);
+                }
+                break;
+            case 5:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    recursivo(P);
+                }
+                break;
+            case 6:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    recursivoInv(P);
+                }
+                break;
+            case 7:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    insertarFinal(P);
+                }
+                break;
+            case 8:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    insertarAntes(&P);
+                }
+                break;
+            case 9:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    eliminarPrimero(&P);
+                }
+                break;
+            case 10:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    eliminarUltimo(&P);
+                }
+                break;
+            case 11:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    eliminarX(&P);
+                }
+                break;
+            case 12:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    buscarRecursivo(P);
+                }
+                break;
+            case 13:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    guardarCSV(P);
+                }
+                break;
+            case 0:
+                printf("Saliendo del programa...\n");
+                break;
+            default:
+                printf("Opcion no valida...\n");
+                break;
         }
-
+        
     }while(OPC != 0);
 
     printf("codigo funcionando correctamente...");
