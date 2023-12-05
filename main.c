@@ -139,22 +139,24 @@ void crearInicio (pNodo *P){
     system("cls"); /*limpia la pantalla*/
 
     /*generamos nuevo nodo*/
-    *P =(pNodo)malloc(sizeof(tNodo));
+    *P = (pNodo)malloc(sizeof(tNodo));
     registraDatos(P);
 
     (*P)->siguiente = NULL;
     (*P)->anterior = NULL;
+    
 
     do{
-            Q = (pNodo) malloc (sizeof(tNodo));
-            (*P)->siguiente = Q;
-            registraDatos(&Q);
-
-            Q->siguiente = NULL;
-            Q->anterior = *P;
-
+        Q = (pNodo) malloc (sizeof(tNodo));
             
-            *P = Q;
+        registraDatos(&Q);
+
+        Q->siguiente=*P;
+        Q->anterior=NULL;
+        (*P)->anterior=Q;
+        
+        *P=Q;
+        
 
         printf("Desea agregar otro registro? (Y/N): ");
         scanf("%s", &opc);
@@ -186,8 +188,10 @@ void crearFinal (pNodo *P){
         Q= (pNodo) malloc(sizeof(tNodo));
         registraDatos(&Q);
 
-        Q->siguiente = NULL;
-        Q->anterior = *P;
+        Q->siguiente=NULL;
+        Q->anterior=*P;
+        T->siguiente=Q;
+        
         T=Q;
 
         printf("Desea agregar otro registro? (Y/N): ");
