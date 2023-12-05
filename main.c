@@ -96,9 +96,6 @@ void registraDatos(pNodo *P){
     scanf("%s", (*P)->apellidoP);
     printf("Apellido Materno: ");
     scanf("%s", (*P)->apellidoM);
-
-    printf("\n");
-
     printf("Numero de la unidad asignada: ");
     scanf("%d", &(*P)->numUnidad); 
     printf("Sucursal de partida: ");
@@ -109,6 +106,7 @@ void registraDatos(pNodo *P){
     scanf(" %[^\n]", (*P)->lugarLlegada);
     printf("Hora de llegada estimada(00:00): ");
     scanf("%s", (*P)->horaLlegada);
+    printf("\n----------------------------------------\n");
    
 }
 
@@ -120,14 +118,12 @@ void imprimeNodo(pNodo *P){
     printf("Nombre de conductor: %s\n", (*P)->nombreChofer);
     printf("Apellido Paterno: %s\n", (*P)->apellidoP);
     printf("Apellido Materno: %s\n", (*P)->apellidoM);
-
-    printf("\n");
-
     printf("Numero de la unidad asignada: %d\n", (*P)->numUnidad); 
     printf("Sucursal de partida: %s\n", (*P)->lugarSalida);
     printf("Hora de salida: %s\n", (*P)->horaSalida);
     printf("Sucursal a arribar : %s\n", (*P)->lugarLlegada);
     printf("Hora de llegada estimada: %s\n", (*P)->horaLlegada);
+    printf("\n----------------------------------------\n\n");
 }
 
 /*--------------------------funciones de creacion----------------------------*/
@@ -151,12 +147,13 @@ void crearInicio (pNodo *P){
 
     do{
             Q = (pNodo) malloc (sizeof(tNodo));
+            (*P)->siguiente = Q;
             registraDatos(&Q);
 
             Q->siguiente = NULL;
             Q->anterior = *P;
 
-            (*P)-> siguiente = Q;
+            
             *P = Q;
 
         printf("Desea agregar otro registro? (Y/N): ");
@@ -217,10 +214,12 @@ void recorrerIterativo (pNodo P){
     system("cls");
     printf("\nmostrando lista de forma iterativa..\n\n");
     
-	    do {
-            imprimeNodo(&Q);
-		    Q=Q->siguiente;
-	    } while (Q != NULL);
+	    while (Q != NULL) {
+        imprimeNodo(&Q);
+        Q = Q->siguiente;
+    }
+
+    printf("imprimi todo\n");
     system("pause");
 
 }
@@ -238,7 +237,7 @@ void recorrerIterativoInverso (pNodo P){
     while (Q->siguiente != NULL){ /*bamos al final*/
     		Q=Q->siguiente;
     }
-
+    system("cls");
     do{
         imprimeNodo(&Q);
         Q=Q->anterior;
@@ -258,7 +257,8 @@ void recursivo(pNodo P){
         imprimeNodo(&P);
         recursivo(P->siguiente);
     }
-    system("pause");
+
+    
 }
 
 
@@ -279,6 +279,7 @@ void recursivoInv(pNodo P){
 
 		Q=Q->anterior;
 	} while (Q != NULL);
+    
     system("pause");
 }
 
@@ -307,6 +308,9 @@ void insertarFinal (pNodo P){
         Q->siguiente=NULL;
         Q->anterior=T;
         T->siguiente=Q;
+
+        printf("\nRegistro insertado correctamente...\n");
+        system("pause");
 }
 
 /*
@@ -342,7 +346,7 @@ void insertarAntes (pNodo *P){
         printf("Registro encontrado...\n");
         X = (pNodo) malloc (sizeof(tNodo));
         registraDatos(&X);
-
+        printf("\nRegistro insertado correctamente...\n");
     if (*P==Q){
         X->anterior=NULL;
         X->siguiente=*P;
@@ -358,6 +362,7 @@ void insertarAntes (pNodo *P){
     }else{
         printf("Registro no encontrado...\n");
     }
+    system("pause");
 }
 
 /*-------------------------------Funciones eliminacion-------------------------*/
@@ -383,6 +388,7 @@ void eliminarPrimero(pNodo *P){
     	}
 
     free(Q);
+    printf("\nRegistro eliminado correctamente...\n");
     system("pause");
 }
 
@@ -408,6 +414,7 @@ void eliminarUltimo(pNodo *P){
     		T->siguiente=NULL;
     		free(Q);
     	}
+    printf("\nRegistro eliminado correctamente...\n");
     system("pause");
 }
 
@@ -448,6 +455,7 @@ void eliminarX(pNodo *P){
 
     free(Q);
     printf("Registro eliminado correctamente...\n");
+    system("pause");
 
 }
 
@@ -484,35 +492,25 @@ Objetivo: Guardar los datos de la lista en un archivo CSV llamado "registro.csv"
 */
 void guardarCSV(pNodo P) {
     FILE *archivo;
-    char *nombreArchivo = "registro.csv";
-
-    archivo = fopen(nombreArchivo, "a+"); // Abre el archivo en modo lectura y escritura, crea el archivo si no existe ("a+")
+    archivo = fopen("registro.csv", "a+"); // Abre el archivo en modo de adición ("a+")
 
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo.\n");
+        printf("No se pudo abrir el archivo.");
         return;
     }
 
-    // Verifica si el archivo está vacío
-    fseek(archivo, 0, SEEK_END); // Se coloca al final del archivo
-    if (ftell(archivo) == 0) { // Comprueba la posición actual para determinar si el archivo está vacío
-        // Si el archivo está vacío, escribe los encabezados
-        fprintf(archivo, "ID Viaje, Hora Registro, ID Chofer, Nombre Chofer, Apellido Paterno, Apellido Materno, Num Unidad, Lugar Salida, Lugar Llegada, Hora Salida, Hora Llegada\n");
-    }
+    // Recorre hasta el final del archivo para escribir los datos
+    fseek(archivo, 0, SEEK_END);
 
-    // Regresa al inicio del archivo
-    fseek(archivo, 0, SEEK_SET);
-
-    // Escribe los datos de la lista en el archivo CSV
     while (P != NULL) {
         fprintf(archivo, "%d, %s, %d, %s, %s, %s, %d, %s, %s, %s, %s\n", P->idViaje, P->hrRegistro, P->idChofer, P->nombreChofer, P->apellidoP, P->apellidoM, P->numUnidad, P->lugarSalida, P->lugarLlegada, P->horaSalida, P->horaLlegada);
         P = P->siguiente;
     }
 
     fclose(archivo); // Cierra el archivo después de escribir los datos
-    printf("Datos guardados correctamente en %s.\n", nombreArchivo);
-    system("pause");
+    printf("Datos guardados correctamente en registro.csv.\n");
 }
+
 
 
 
@@ -557,7 +555,9 @@ int main(){
                     printf("\nLa lista esta VACIA cree un registro antes...\n");
                     system("pause");
                 }else{
+                    system("cls");
                     recursivo(P);
+                    system("pause");
                 }
                 break;
             case 6:
@@ -565,6 +565,7 @@ int main(){
                     printf("\nLa lista esta VACIA cree un registro antes...\n");
                     system("pause");
                 }else{
+                    system("cls");
                     recursivoInv(P);
                 }
                 break;
