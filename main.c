@@ -55,6 +55,7 @@ void imprimeMenu(){
     printf("11.-Eliminar registro especifico\n");
     printf("12.-Buscar registro\n");
     printf("13.-Exportar registro a una tabla\n");
+    printf("14.-Ordenar registros por ID\n");
     printf("0.-Salir\n\n");
 
 }
@@ -469,23 +470,68 @@ NOmbre:buscarRecursivo
 fecha: 02/12/2023
 objetivo: buscar un registro solicitado de la lista de forma recursiva
 */
-void buscarRecursivo(pNodo P){
-    int NumRef;
-    printf("Ingrese el ID del empleado, unidad o viaje que desea buscar: ");
-    scanf("%d", &NumRef);
+void buscarRecursivo(pNodo P, int NumRef){
 
     if(P != NULL){
         if(P->idChofer == NumRef || P->numUnidad == NumRef || P->idViaje == NumRef){
             printf("Registro encontrado...\n");
             imprimeNodo(&P);
         }else{
-            buscarRecursivo(P->siguiente);
+            buscarRecursivo(P->siguiente, NumRef);
         }
     }else{
         printf("Registro no encontrado...\n");
     }
     system("pause");
 }
+
+/*
+Nombre: ordenamientoShell
+Fecha: 03/12/2023
+Objetivo: Ordenar los nodos de la lista mediante el algoritmo de ordenamiento Shell
+por los diferentes IDs: ID del chofer, ID del viaje y número de unidad.
+*/
+void ordenamientoShell(pNodo P) {
+    int intervalo = 1;
+    pNodo temp, aux;
+    int i, j;
+
+    // Calculando el intervalo
+    while (intervalo < 1) {
+        intervalo = intervalo * 3 + 1;
+    }
+
+    // Aplicando el algoritmo de ordenamiento Shell
+    while (intervalo > 0) {
+        aux = P;
+        while (aux != NULL) {
+            temp = aux;
+            while (temp->anterior != NULL && temp->idViaje < temp->anterior->idViaje) {
+                // Intercambiar nodos
+                temp->anterior->siguiente = temp->siguiente;
+                if (temp->siguiente != NULL) {
+                    temp->siguiente->anterior = temp->anterior;
+                }
+                temp->siguiente = temp->anterior;
+                temp->anterior = temp->anterior->anterior;
+                temp->siguiente->anterior = temp;
+
+                if (temp->anterior == NULL) {
+                    P = temp;
+                } else {
+                    temp->anterior->siguiente = temp;
+                }
+            }
+            aux = aux->siguiente;
+        }
+        intervalo = intervalo / 2;
+    }
+    printf("Datos ordenados correctamente.\n");
+    system("pause");
+}
+
+
+
 
 /*///////////////////////////////FUNCIONES DE GESTION DE ARCHIVOS////////////////////////////*/
 
@@ -503,11 +549,21 @@ void guardarCSV(pNodo P) {
         return;
     }
 
-    // Recorre hasta el final del archivo para escribir los datos
+    // Verifica si el archivo está vacío
+    fseek(archivo, 0, SEEK_END);
+    long archivoSize = ftell(archivo);
+
+    // Si el archivo está vacío, añade una cabecera
+    if (archivoSize == 0) {
+        fprintf(archivo, "ID Viaje, Hora Registro, ID Chofer, Nombre Chofer, Apellido Paterno, Apellido Materno, Numero Unidad, Lugar Salida, Lugar Llegada, Hora Salida, Hora Llegada\n");
+    }
+
     fseek(archivo, 0, SEEK_END);
 
     while (P != NULL) {
-        fprintf(archivo, "%d, %s, %d, %s, %s, %s, %d, %s, %s, %s, %s\n", P->idViaje, P->hrRegistro, P->idChofer, P->nombreChofer, P->apellidoP, P->apellidoM, P->numUnidad, P->lugarSalida, P->lugarLlegada, P->horaSalida, P->horaLlegada);
+        fprintf(archivo, "%d, %s, %d, %s, %s, %s, %d, %s, %s, %s, %s\n",
+                P->idViaje, P->hrRegistro, P->idChofer, P->nombreChofer, P->apellidoP, P->apellidoM,
+                P->numUnidad, P->lugarSalida, P->lugarLlegada, P->horaSalida, P->horaLlegada);
         P = P->siguiente;
     }
 
@@ -519,10 +575,12 @@ void guardarCSV(pNodo P) {
 
 
 
+
 int main(){
     pNodo P = NULL;
     int X;
     int OPC = 0;
+    int NumRef;
 
     do{
         system("cls");
@@ -618,7 +676,11 @@ int main(){
                     printf("\nLa lista esta VACIA cree un registro antes...\n");
                     system("pause");
                 }else{
-                    buscarRecursivo(P);
+                    
+                    printf("Ingrese el ID del empleado, unidad o viaje que desea buscar: ");
+                    scanf("%d", &NumRef);
+
+                    buscarRecursivo(P, NumRef);
                 }
                 break;
             case 13:
@@ -629,6 +691,14 @@ int main(){
                     guardarCSV(P);
                 }
                 break;
+            case 14:
+                if(veriEstado(P)){
+                    printf("\nLa lista esta VACIA cree un registro antes...\n");
+                    system("pause");
+                }else{
+                    ordenamientoShell(P);
+                }
+
             case 0:
                 printf("Saliendo del programa...\n");
                 break;
